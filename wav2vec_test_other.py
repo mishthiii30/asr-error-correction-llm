@@ -102,3 +102,9 @@ display(results_df)
 if results:
     avg_wer = results_df["WER"].mean()
     print(f"\n📊 Average Word Error Rate (WER): {avg_wer:.3f}")
+
+'''valuation Result (Wav2Vec on LibriSpeech "test-other")
+
+This script was used to evaluate the performance of the Wav2Vec model on the "test-other" subset of the LibriSpeech dataset, comprising 2939 audio samples. The model generated transcriptions for each sample, and the Word Error Rate (WER) was calculated individually for each one.
+
+After aggregating the results, the average WER was approximately 0.101 (i.e., 10.1%).  this WER metric is not ideal.'''
