@@ -1,0 +1,802 @@
+[
+    {
+        "id": 0,
+        "ground_truth": "This device has a cathode inside an anode wire cage.",
+        "asr_output": "MISS DELIGHT HAS A CATHODE INSIDE AN ANOUD WIRE CAGE",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.4,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 1,
+        "ground_truth": "This product is almost always produced by the industrialized method.",
+        "asr_output": "THIS PRODUCT IS ALMOST ALWAYS PRODUCED BY THE INDUSTRIALIZED METHOD",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.1,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 2,
+        "ground_truth": "It is named after Edward Singleton Holden.",
+        "asr_output": "IT IS NAMED AFTER EDWARD SINGLETON HOLD THEM",
+        "corrected_output": "Grammatik: grammar:",
+        "wer_asr": 0.2857142857142857,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 3,
+        "ground_truth": "It is north west of the regional centre of Clare.",
+        "asr_output": "THIS NORTHWEST OF THE REGINAL CENTRE OF CLAIRE",
+        "corrected_output": "Grammatik: THIS NONTHWEST OF THE REGINAL CENTRE OF CLAIRE",
+        "wer_asr": 0.6,
+        "wer_corrected": 0.6
+    },
+    {
+        "id": 4,
+        "ground_truth": "He was a nephew of Rear-Admiral Sir Francis Augustus Collier.",
+        "asr_output": "HE WAS A NEPHEW OF REARE ADMIRAL SIR FRANCIS AUGUSTUS COLLIER",
+        "corrected_output": ": A NEPHEW OF REARE ADMIRAL SIR FRANCIS AUGUSTUS COLLIER",
+        "wer_asr": 0.3,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 5,
+        "ground_truth": "Leaving for some darn camp in Mississippi.",
+        "asr_output": "LEAVING FOR SOME DARN CAMP IN MISSISSIPPI",
+        "corrected_output": "grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar grammar: LEAVING FOR SOME DARN CAMP IN MISSISSIPPI",
+        "wer_asr": 0.14285714285714285,
+        "wer_corrected": 4.142857142857143
+    },
+    {
+        "id": 6,
+        "ground_truth": "While employed in this role, Johnson won the prestigious Robert F. Kennedy Award.",
+        "asr_output": "WHILE EMPLOYED IN THIS RULE JOHNSON WON THE PRESTIGIOUS ROBERT F KENNEDY AWARD",
+        "corrected_output": "Grammatik: WHILE EMPLOYED IN THIS RULE JOHNSON WON THE PRESTIGIOUS ROBERT F KENNEDY AWARD",
+        "wer_asr": 0.23076923076923078,
+        "wer_corrected": 0.3076923076923077
+    },
+    {
+        "id": 7,
+        "ground_truth": "Samuel Lyons proceeded to subdivide Five Dock Farm into substantial estates.",
+        "asr_output": "SAMUEL LIONS PROCEEDED TO SUBDIVIDE FIVE DOCK ARM INTO SUBSTANTIAL ESTATES",
+        "corrected_output": "Grammatik: SAMUEL LIONS PROCEED TO SUBDIVIDE FIVE DOCK ARM INTO SUBSTANTIAL ESTATES:",
+        "wer_asr": 0.2727272727272727,
+        "wer_corrected": 0.45454545454545453
+    },
+    {
+        "id": 8,
+        "ground_truth": "Where did it come from then?",
+        "asr_output": "WHERE DID IT COME FROM THEN",
+        "corrected_output": "grammar:",
+        "wer_asr": 0.16666666666666666,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 9,
+        "ground_truth": "Since then, three more have been abolished, leaving four.",
+        "asr_output": "SINCE THEN THREE MORE HAVE BEEN ABOLISHED LEAVING FOUR",
+        "corrected_output": "Grammatika: SINCE THEN THREE MORE HAVE BEEN ABOLISHED LEAVING FOUR.",
+        "wer_asr": 0.3333333333333333,
+        "wer_corrected": 0.3333333333333333
+    },
+    {
+        "id": 10,
+        "ground_truth": "\"Narwhal\" joined the Atlantic Torpedo Fleet, based at Newport, Rhode Island.",
+        "asr_output": "NAR WALL JOINED THE ATLANTIC TORPEDO FLEET BASED AT NEWPORT RHODE ISLAND",
+        "corrected_output": "Grammatik: NAR WALL",
+        "wer_asr": 0.45454545454545453,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 11,
+        "ground_truth": "The airline was later removed from the blacklist after complying with safety audits.",
+        "asr_output": "THE AIR LINE WAS LATER REMOVED FROM THE BLACK LIST AFTER COMPLYING WITH SAFETY AUDYC",
+        "corrected_output": "Grammatik: THE AIRLINE WAS LATER REMOVED FROM THE BLACK LIST AFTER COMPLYING WITH SAFETY AUDYC",
+        "wer_asr": 0.38461538461538464,
+        "wer_corrected": 0.3076923076923077
+    },
+    {
+        "id": 12,
+        "ground_truth": "The paper has the slogan \"Never Apologise, Never Explain!\".",
+        "asr_output": "THE PAPER HAS THE SLOGAN NEVER APOLOGIZE NEVER EXPLAIN",
+        "corrected_output": "grammar: THE PAPER HAS THE SLOGAN NEVER APOLOGIZE NEVER EXPLAIN",
+        "wer_asr": 0.3333333333333333,
+        "wer_corrected": 0.4444444444444444
+    },
+    {
+        "id": 13,
+        "ground_truth": "He was born in Tokyo.",
+        "asr_output": "HE WAS BORN IN TOCIO",
+        "corrected_output": "grammar: HE WAS BORN IN TOCIO",
+        "wer_asr": 0.2,
+        "wer_corrected": 0.4
+    },
+    {
+        "id": 14,
+        "ground_truth": "You just shoot that.",
+        "asr_output": "YOU JUST SHOOT THAT",
+        "corrected_output": "Grammatik: YOU JUST SHOOT THAT",
+        "wer_asr": 0.25,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 15,
+        "ground_truth": "Chen was a low profile talented scholar with a number of \"first\" accomplishments.",
+        "asr_output": "CHIN WAS A LIPRIFILE TAWENTED SCULLAR WITH A NUMBER OF THIRST ACCOMPLISHMENTS",
+        "corrected_output": "Grammatik: CHIN WAS A LIPRIFILE TAWENTED SCULLAR WITH A NUMBER OF THIRST ACCOMPLISHMENTS: CHIN WAS A LIPRIFILE TAWENTED SCULLAR WITH A NUMBER OF THIRST ACCOMPLISHMENTS.",
+        "wer_asr": 0.5384615384615384,
+        "wer_corrected": 1.3846153846153846
+    },
+    {
+        "id": 16,
+        "ground_truth": "The Fulshear City Council asked the county to name the library after Lutts.",
+        "asr_output": "THE FUNCHER SAID HE COUNSIL ASKED THE COUNTY TO NAME THE LIBRARY AFTER LADS",
+        "corrected_output": "Grammatik: THE FUNCHER SAID HE COUNSIL ASKED THE COUNTY TO NAME THE LIBRARY AFTER LADS",
+        "wer_asr": 0.38461538461538464,
+        "wer_corrected": 0.46153846153846156
+    },
+    {
+        "id": 17,
+        "ground_truth": "The Cascade Lakes Scenic Byway continues south along the west side of Mount Bachelor.",
+        "asr_output": "THE CASCADE LAKE SCENIXS BYWAY CONTINUES SOUTH ALONG THE WEST SIDE OF MOUNT BACHELOR",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.21428571428571427,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 18,
+        "ground_truth": "Montgomerie was eliminated.",
+        "asr_output": "MONTGOMERY WAS ELIMINATED",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.6666666666666666,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 19,
+        "ground_truth": "Depending on the time period and culture, the term can have several meanings.",
+        "asr_output": "DEPENDING ON THE TIME PERIOD IN CULTURE THE TERM CAN HAVE SEVERAL MEANINGS",
+        "corrected_output": "Grammatik: DEPENDING ON THE TIME PERIOD IN CULTURE THE TERM CAN HAVE SEVERAL MEANINGS",
+        "wer_asr": 0.23076923076923078,
+        "wer_corrected": 0.3076923076923077
+    },
+    {
+        "id": 20,
+        "ground_truth": "The objective of the game is to capture your opponent's king.",
+        "asr_output": "THE OBJECTIVE OF THE GAME IS TO CAPTURE YOUR OPPONENT'S KING",
+        "corrected_output": ": THE OBJECTIVE OF THE GAME IS TO CAPTURE YOUR OPPONENT'S KING",
+        "wer_asr": 0.09090909090909091,
+        "wer_corrected": 0.18181818181818182
+    },
+    {
+        "id": 21,
+        "ground_truth": "It is a producer of photovoltaic solar modules.",
+        "asr_output": "IT IS A PRODUSA A FORTO VORTEEC SOLOMOGIURS",
+        "corrected_output": "Grammatik: IT IS A PRODUSA A FORTO VORTEEC SOLOMOGIURS FORMULAIRE: IT IS A PRODUSA A FORTO VORTEEC SOLOMOGIURS",
+        "wer_asr": 0.625,
+        "wer_corrected": 1.875
+    },
+    {
+        "id": 22,
+        "ground_truth": "Population change chart of Ch\u00eanedouit",
+        "asr_output": "POPULATION CHANGED JOT OF CHENDUIS",
+        "corrected_output": "Grammatik: grammar:",
+        "wer_asr": 0.6,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 23,
+        "ground_truth": "I have to be with my father.",
+        "asr_output": "I HAVE TO BE WITH MY FATHER",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.14285714285714285,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 24,
+        "ground_truth": "In the dormitory where Beppe used to work they joked around almost always.",
+        "asr_output": "IN THE DOMITORY WHERE BEPPY USED TO WORK THEY JOKED ROUND ALMOST ALWAYS",
+        "corrected_output": "Grammatik: IN THE DOMITORY WHERE BEPPY USED TO WORK THEY JOKED ROUND ALMOST ALWAYS",
+        "wer_asr": 0.3076923076923077,
+        "wer_corrected": 0.38461538461538464
+    },
+    {
+        "id": 25,
+        "ground_truth": "It was reformist in nature and did not protest against Sanation authoritarianism or capitalism.",
+        "asr_output": "IT WAS A PROMIST IN NATURE AND DID NOT PROTEST AGAINST THEETATION AUTTOINASIM ORTU",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.42857142857142855,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 26,
+        "ground_truth": "Morrison stated that the current system is \"not fit for purpose\".",
+        "asr_output": "MORRISON STATED THAT THE CURRANT SISTOR IS NOT FIT FOR PURPOSE",
+        "corrected_output": "grammar: MORRISON STATED THAT THE CURRANT SISTOR IS NOT FIT FOR PURPOSE",
+        "wer_asr": 0.36363636363636365,
+        "wer_corrected": 0.45454545454545453
+    },
+    {
+        "id": 27,
+        "ground_truth": "Crichton also served on Berkshire County Council.",
+        "asr_output": "CRISTAN ALSO SERT ON BEGSHIRE CONTE CONSUL",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.7142857142857143,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 28,
+        "ground_truth": "The cast included Gena Rowlands and Diane Lane.",
+        "asr_output": "THE GEST INCLODU GIANA ROLANDS AND DIANA LAY",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.75,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 29,
+        "ground_truth": "Many of its mineral reserves have yet to be fully tapped.",
+        "asr_output": "MANY OF ITS MINERAL RESERVES HAVE YET TO BE FULLY TAPPED",
+        "corrected_output": "Grammatik: MANY OF ITS MINERAL RESERVES HAVE JET TO BE FULLY TAPPED",
+        "wer_asr": 0.09090909090909091,
+        "wer_corrected": 0.2727272727272727
+    },
+    {
+        "id": 30,
+        "ground_truth": "The Gatineau casino thus also serves Ottawa and Eastern Ontario.",
+        "asr_output": "THE GATINOR CASINOT THUS ALSO SERVES ATTO AN EASTERND ANTARIO",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.6,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 31,
+        "ground_truth": "John Strachan and William Allan and moved to Toronto.",
+        "asr_output": "JOHN STRAKAN AND WIAM ALLEN AND MOVED TO TORANTO",
+        "corrected_output": "grammar: JOHN STRAKAN AND WIAM ALLEN AND MOVED TO TORANTO",
+        "wer_asr": 0.4444444444444444,
+        "wer_corrected": 0.5555555555555556
+    },
+    {
+        "id": 32,
+        "ground_truth": "Ringing is the result of overshoot caused by an underdamped circuit.",
+        "asr_output": "RINGING IS THE RESULT OF OVERSHUTE CAUSED BY AN UNDERDAMPED CIRCUIT",
+        "corrected_output": "Grammatik: RINGING IS THE RESULT OF OVERSHUTE CAUSED BY UNDERDAMPED CIRCUIT",
+        "wer_asr": 0.18181818181818182,
+        "wer_corrected": 0.36363636363636365
+    },
+    {
+        "id": 33,
+        "ground_truth": "He was the son of Admiral Henrik Bielke.",
+        "asr_output": "HE WAS THE SON OF ADMIRAL HENRY BULCEM",
+        "corrected_output": "grammar: HE WAS THE SON OF ADMIRAL HENRY BULCEM",
+        "wer_asr": 0.25,
+        "wer_corrected": 0.375
+    },
+    {
+        "id": 34,
+        "ground_truth": "Johannes Terho was vice president of the Finnish Chess Federation.",
+        "asr_output": "JOHIGHNESS TERHO WAS BE TE PRESIDENT OF THE PHOIENISH CHEST FITHERATION",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.6,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 35,
+        "ground_truth": "She was also cast in \"Wild Guys\".",
+        "asr_output": "SHE WAS ALSO CAST WIT GASE",
+        "corrected_output": "Grammatik",
+        "wer_asr": 0.42857142857142855,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 36,
+        "ground_truth": "Douw was married three times.",
+        "asr_output": "THOUG WAS MARIET THREE TIMES",
+        "corrected_output": "Grammatik: THOUG WAS MARIET 3",
+        "wer_asr": 0.6,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 37,
+        "ground_truth": "Conger's mother is actress Susan Harrison.",
+        "asr_output": "CONGUES'S MOTHER IS ACTRESS SUSAN HARRISON",
+        "corrected_output": "Grammatik: CONGUES' MOTHER IS ACTRESS SUSAN HARRISON",
+        "wer_asr": 0.3333333333333333,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 38,
+        "ground_truth": "It is a skiing resort with modern skiing equipment.",
+        "asr_output": "IT IS A SCHEING RESORT WITH MODEN SCHENG EQUIPMENT",
+        "corrected_output": "Grammatik: IT IS A SCHEING RESORT WITH MODEN SCHENG EQUIPMENT: IT IS A SCHEING RESORT WITH MODEN SCHENG EQUIPMENT",
+        "wer_asr": 0.4444444444444444,
+        "wer_corrected": 1.5555555555555556
+    },
+    {
+        "id": 39,
+        "ground_truth": "He then asks Helmut to do his hammering \"with a little discretion\".",
+        "asr_output": "HED THEN ASKED HELMET TO DO HIS HAMMERING WITH A LITTLE DISCRETION",
+        "corrected_output": "Grammatical: HED THEN ASKED HELMET TO DO HIS HAMMERING WITH A LITTLE DISCRETION: HED THEN ASKED HELMET TO DO HIS HAMMERING WITH A LITTLE DISCRETION",
+        "wer_asr": 0.4166666666666667,
+        "wer_corrected": 1.5
+    },
+    {
+        "id": 40,
+        "ground_truth": "Jones refused and wrote about the incident on her website.",
+        "asr_output": "JOHNS REFUSED AND WROGHT ABOUT THE INCIDENT ON HER WEPSIDE",
+        "corrected_output": "Grammatik",
+        "wer_asr": 0.3,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 41,
+        "ground_truth": "A ripe plum is fit for a king's palate.",
+        "asr_output": "A LIT PLUMP IS FIT WERAKING SPURLAD",
+        "corrected_output": "Grammatik",
+        "wer_asr": 0.6666666666666666,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 42,
+        "ground_truth": "Karetu School is also a local primary school in the Kawakawa region.",
+        "asr_output": "CARATZUS SCHOOL IS ALSO A LOCAL PRIMER SCHOOL IN THE CAWACAWORAGION",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.3333333333333333,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 43,
+        "ground_truth": "The location is between the towns of Jean and Primm.",
+        "asr_output": "THE LOCATION IS BETWEEN THE TAMS OF JEAN AND PRIM",
+        "corrected_output": "Grammatik: grammar: grammar:",
+        "wer_asr": 0.2,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 44,
+        "ground_truth": "A colony of the Moravian Church was also founded in the same year.",
+        "asr_output": "A COLONY OF THE MORAVIAN CHURCH WAS ALSO FOUNDED IN THE SAME YEAR",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.07692307692307693,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 45,
+        "ground_truth": "During these dates, Fang begins to relate the tale of her friend's parents.",
+        "asr_output": "DURING THESE DAYS FANK BEGINS TO RELATE THE TALE OF HER FRIEND'S PARENTS",
+        "corrected_output": "Gratmatical: FANK BEGINS TO RELATE THE TALE OF HER FRIEND'S PARENTS DURING THESE DAYS FANK BEGINS TO RELATE THE TALE OF HER FRIEND'S PARENTS",
+        "wer_asr": 0.23076923076923078,
+        "wer_corrected": 1.0769230769230769
+    },
+    {
+        "id": 46,
+        "ground_truth": "He moved to Boston, where he became increasingly obsessed with his health.",
+        "asr_output": "HE MOVED TO BOSTON WHERE HE BECAME INCREASINGLY OBSESEN WITH HIS HEADS",
+        "corrected_output": ": HE MOVED TO BOSTON WHERE HE BECAME INCREASINGLY OBSESEN WITH HIS HEADS",
+        "wer_asr": 0.25,
+        "wer_corrected": 0.3333333333333333
+    },
+    {
+        "id": 47,
+        "ground_truth": "After winning the election, Sharon needed to form a government in the Knesset.",
+        "asr_output": "AFTER WINNING THE ELECTION CHARRON NEEDED TO FORM A GOVERNMENT INDIGNICET",
+        "corrected_output": "grammar: AFTER WINNING THE ELECTION CHARRON NEEDED TO FORM A GOVERNMENT INDIGNICET",
+        "wer_asr": 0.38461538461538464,
+        "wer_corrected": 0.46153846153846156
+    },
+    {
+        "id": 48,
+        "ground_truth": "The film was animated in both Britain and San Francisco, California.",
+        "asr_output": "THE FIELD WAS ANIMATED IN BOTH BRITAIN AND SAN FRANCISCO CALIFORNIA",
+        "corrected_output": "Grammatik: THE FIELD ANIMATED IN BOTH BRITAIN AND SAN FRANCISCO CALIFORNIA",
+        "wer_asr": 0.2727272727272727,
+        "wer_corrected": 0.45454545454545453
+    },
+    {
+        "id": 49,
+        "ground_truth": "His alternative position was wing.",
+        "asr_output": "HIS ALTERNATIVE POSITION WAS BING",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.2,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 50,
+        "ground_truth": "As a solo performer, he later released two albums.",
+        "asr_output": "AS IN SAW A PERFORMA HE LAI TO LACED TWO ALVOMS",
+        "corrected_output": "Grammatik: AS IN SAW PERFORMA HE LAI TO LACED TWO ALVOMS",
+        "wer_asr": 0.8888888888888888,
+        "wer_corrected": 0.8888888888888888
+    },
+    {
+        "id": 51,
+        "ground_truth": "The first and most widely used tracers are sunspots.",
+        "asr_output": "THE FIRST AND MOST WITELY USED TRASOZAR SUN SPOTS",
+        "corrected_output": "Grammatik: GER",
+        "wer_asr": 0.4444444444444444,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 52,
+        "ground_truth": "They're going to get penalized for it, but So what?",
+        "asr_output": "THEY ARE GOING TO GET PUNLES FOR IT BUT SO WHAT",
+        "corrected_output": "Grammatik: GOING TO GET PUNLES FOR IT BUT SO WHAT",
+        "wer_asr": 0.5,
+        "wer_corrected": 0.4
+    },
+    {
+        "id": 53,
+        "ground_truth": "The game had changed by the time the first Spanish settlers arrived.",
+        "asr_output": "THE GAME HAD CHANGED BY THE TIME THE FIRST SPANISH SETTLERS ALOWED",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.08333333333333333,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 54,
+        "ground_truth": "Some Indian Pattern cars saw use in the Indian subcontinent and Burma.",
+        "asr_output": "SOME INDIAN PATTERN CARS SAW USE IN THE INDIAN SOME CONTINENT AND BERMER",
+        "corrected_output": "Grammatik: SOME INDIAN PATTERN CARS SAW USE IN THE INDIAN SOME CONTINENT AND BERMER",
+        "wer_asr": 0.25,
+        "wer_corrected": 0.3333333333333333
+    },
+    {
+        "id": 55,
+        "ground_truth": "Before the grain can be used, the husks must be removed.",
+        "asr_output": "BEFORE THE GRAIN CAN BE USED THE HUSKS MUST BE REMOVED",
+        "corrected_output": "Grammatik: BEFORE THE GRAIN CAN BE USED THE HUSKS MUST BE REMOVED",
+        "wer_asr": 0.18181818181818182,
+        "wer_corrected": 0.2727272727272727
+    },
+    {
+        "id": 56,
+        "ground_truth": "For thousands of years, Native American tribes inhabited this region.",
+        "asr_output": "FOR THOUSANDS OF YEARS NATIVE AMERICAN TRIBES INHABITED THIS REGION",
+        "corrected_output": "Grammatik: FOR THOUSANDS OF YEARS NATIVE AMERICAN TRIBES INHABITED THIS REGION",
+        "wer_asr": 0.2,
+        "wer_corrected": 0.3
+    },
+    {
+        "id": 57,
+        "ground_truth": "Therefore, transitivity is semantically valid without any constraints.",
+        "asr_output": "THEREFORE TRANSIVITY IS SABANTICALLY VALID WITHOUT ANY CONSTRAINTS",
+        "corrected_output": "Grammatik: grammatical: THEREFORE TRANSIVITY IS SABANTICALLY VALID WITHOUT ANY CONSTRAINTS",
+        "wer_asr": 0.5,
+        "wer_corrected": 0.75
+    },
+    {
+        "id": 58,
+        "ground_truth": "Nevertheless, the inhabitants decided to improve their farming techniques and started making terraces.",
+        "asr_output": "NEVERTHELESS THE INHABITANTS DECIDED TO IMPROVE THEIR FARMING TECHNIQUES AND STARTED MAKING TERRACES",
+        "corrected_output": "Grammatik: NEVERTHELESS THE INHABITANTS DECIDED TO IMPRISE THEIR FARMING TECHNIQUES",
+        "wer_asr": 0.15384615384615385,
+        "wer_corrected": 0.5384615384615384
+    },
+    {
+        "id": 59,
+        "ground_truth": "For more detail, see the article in the \"Anchor Bible Dictionary\".",
+        "asr_output": "FOR MORE DETAIL SEE THE ARTICLE IN THE ANCHOR BIBLE DICTIONARY",
+        "corrected_output": "Grammatik: FOR MORE DETAIL SEE THEARTICLE IN THE ANCHOR BIBLE DICTIONARY",
+        "wer_asr": 0.2727272727272727,
+        "wer_corrected": 0.5454545454545454
+    },
+    {
+        "id": 60,
+        "ground_truth": "Its county seat is Murphy.",
+        "asr_output": "ITS COUNTY SEAT IS MURPHY",
+        "corrected_output": ": ITS COUNTY SEAT IS MURPHY",
+        "wer_asr": 0.2,
+        "wer_corrected": 0.4
+    },
+    {
+        "id": 61,
+        "ground_truth": "Tom sleeps with the queen, Celia, but is compelled to return to his quest.",
+        "asr_output": "TOM SLEEPS WITH THE QUEEN CELIA BUT IS COMPELLED TO RETURN TO HIS QUEST",
+        "corrected_output": "Grammatik: TOM SLEEPS WITH THEQUEEN CELIA BUT IS COMPELLED TO RETURN TO HIS QUEST",
+        "wer_asr": 0.21428571428571427,
+        "wer_corrected": 0.35714285714285715
+    },
+    {
+        "id": 62,
+        "ground_truth": "It was named for Cleora Ann Lunday, sister of the postmaster, Ed Lunday.",
+        "asr_output": "IT WAS NAMED FOR CLEORA AND ONE DAY SISTER POSTMASTER AT LONDAY",
+        "corrected_output": "Grammatik: IT WAS NAMED FOR CLEORA AND one DAY SISTER POSTMASTER AT LONDAY",
+        "wer_asr": 0.6153846153846154,
+        "wer_corrected": 0.6923076923076923
+    },
+    {
+        "id": 63,
+        "ground_truth": "The control tower has been recorded as being haunted.",
+        "asr_output": "THE CONTROL TOWER HAS BEEN RECORDED AS BEING HAUNTED",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.1111111111111111,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 64,
+        "ground_truth": "It is also sometimes prepared for wedding banquets.",
+        "asr_output": "IT IS ALSO SOMETIMES PREPARED FOR WEDDING BANQUETS",
+        "corrected_output": "Grammatik: IT IS ALSO SOMETIMES PREPARED FOR WEDDING BANQUETS: IT IS ALSO SOMETIMES PREPARED FOR WEDDING BANQUETS.",
+        "wer_asr": 0.125,
+        "wer_corrected": 1.125
+    },
+    {
+        "id": 65,
+        "ground_truth": "Toliver also proves important in Hawk-Owl's origin later on in the series.",
+        "asr_output": "TOLLIVER ALSO PROVES IMPORT MEN MACCEL'S ORIGIN LATER ON THE SYRIES",
+        "corrected_output": "Grammatik: TOLLIVER PROVES IMPORT MEN MACCEL'SORIGIN LATER ON THE SYRIES: TOLLIVER ALSO PROVES IMPORT MEN MACCEL'SORIGIN LATER ON THE SYRIES",
+        "wer_asr": 0.5,
+        "wer_corrected": 1.4166666666666667
+    },
+    {
+        "id": 66,
+        "ground_truth": "However, both creatures were fond of pranks and misleading people.",
+        "asr_output": "HOWEVER BOTH CREATURES WERE FOND OF HANKS AND MISLEADING PEOPLE",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.3,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 67,
+        "ground_truth": "The song is played only to the chorus.",
+        "asr_output": "THE SAM IS PLAYED ON LY TWO THE CORUS",
+        "corrected_output": "Grammatik: gramma",
+        "wer_asr": 0.625,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 68,
+        "ground_truth": "Additional local programming is planned, including some previously aired on the college's cable channel.",
+        "asr_output": "ADDITIONAL LOCALY PROGRAMMING HIS PLANNED INCLUDING SOME PREVIOUSLY ERD ON THE COLLEGES SCIBLE CHANONOM",
+        "corrected_output": "Grammatik: ADDITIONAL PROGRAMMING HIS PLANNED INCLUDING SOME PREVIOUSLY ERD ON THE COLLEGES SCIBLE CHANONOM",
+        "wer_asr": 0.5,
+        "wer_corrected": 0.5714285714285714
+    },
+    {
+        "id": 69,
+        "ground_truth": "Today there is an arena in London named for him.",
+        "asr_output": "TO DAY THERE IS AN ARENA IN LONDON NAMED FAR HIM",
+        "corrected_output": "Grammatik: TO DAY THERE IS an ARENA IN LONDON NAMED FAR HIM",
+        "wer_asr": 0.4,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 70,
+        "ground_truth": "The record label draws its name from notorious drug lord Griselda Blanco.",
+        "asr_output": "THE RECORD LABEL DRAWS ITS NAME FROM NOTORIOUS DRUG LORD CRISELDA BLANGO",
+        "corrected_output": "Grammatik: GER",
+        "wer_asr": 0.16666666666666666,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 71,
+        "ground_truth": "The vehicles sold there would be used for luxury taxi operations.",
+        "asr_output": "THE VEHICLES SOLD THERE WOULD BE USED FOR LUXURY TEXI OPERATIONS",
+        "corrected_output": "Grammatik: THE VEHICLES SOLD THERE WOULD BE USED FOR LUXURY TEXI OPERATIONS",
+        "wer_asr": 0.18181818181818182,
+        "wer_corrected": 0.2727272727272727
+    },
+    {
+        "id": 72,
+        "ground_truth": "He created what grew into the beacon service and the hydrographic services.",
+        "asr_output": "HE CREATED WHAT GREW INTO THE BEACON SERVICE AND THE HYDROGRAPHIC SERVICES",
+        "corrected_output": "Grammatik: HE CREATED WHAT GREW INTO THE BEACON SERVICE AND THE HYDROGRAPHIC SERVICES",
+        "wer_asr": 0.08333333333333333,
+        "wer_corrected": 0.16666666666666666
+    },
+    {
+        "id": 73,
+        "ground_truth": "Classmates called her \"Baby\" since she was the youngest girl.",
+        "asr_output": "CLASSMATES CALLED HER BABY SINCE SHE WAS THE YOUNGEST GIRL",
+        "corrected_output": "Grammatik: CLASSMATES CALLEDHER BABY SINCE SHE WAS THE YOUNGEST GIRL",
+        "wer_asr": 0.2,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 74,
+        "ground_truth": "Ionikos Nikaias clinched the championship by winning the regular season.",
+        "asr_output": "YONICOS NIKAYAS CLINCHED THE CHOPIN SHIP BY WINNING THE REGULAR SEASON",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.5,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 75,
+        "ground_truth": "Its provisional seat was located in Kovel.",
+        "asr_output": "ITS PROVISIONAL SIT WAS LOCETI IN COVELL",
+        "corrected_output": ": ITS PROVISIONAL SIT WAS LOCETI IN COVELL",
+        "wer_asr": 0.42857142857142855,
+        "wer_corrected": 0.5714285714285714
+    },
+    {
+        "id": 76,
+        "ground_truth": "Wylie Collegiate Professor of Civil Engineering at the University of Michigan.",
+        "asr_output": "WHYLECOLLEGIATE PROFESSOR OF CIVILINGENEING AT THE UNIVERSITY OF MICHIGAN",
+        "corrected_output": "Grammatik: WHYLECOLLEGIATE PROFESSOR OF CIVILINGENEING AT THEUNIVERSITY OF MICHIGAN",
+        "wer_asr": 0.45454545454545453,
+        "wer_corrected": 0.6363636363636364
+    },
+    {
+        "id": 77,
+        "ground_truth": "Among them include President of Singapore Halimah Yacob.",
+        "asr_output": "AMONG THEM INCLUDE PRESIDENT OF SINGAPRO ANIMALACOE",
+        "corrected_output": "Grammatik: AMONG THEMINCLUDE PRESIDENT OF SINGAPRO ANIMALACOE",
+        "wer_asr": 0.375,
+        "wer_corrected": 0.75
+    },
+    {
+        "id": 78,
+        "ground_truth": "The famous straight is often called the Mulsanne Straight in English.",
+        "asr_output": "YOUR FAMOUSTRY IS OFTEN CALLED DE MISLAINE STRAIGHT IN ENGLISH",
+        "corrected_output": "grammar: YOUR FAMOUSTRY IS OFTEN CALLED DE MISLAINE STRAIGHT IN ENGLISH",
+        "wer_asr": 0.5454545454545454,
+        "wer_corrected": 0.5454545454545454
+    },
+    {
+        "id": 79,
+        "ground_truth": "These positions are not held for the duration of a skydive.",
+        "asr_output": "THESE PHYSICIANS ARE NOT HELPED FOR THE DURATION OFOF A SKYDIFE",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.36363636363636365,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 80,
+        "ground_truth": "Both boys also frequently worked as farm laborers to supplement their allowance.",
+        "asr_output": "BOTH BOYS ARE SO FREQUENTLY WORKED AS FARM LABORS T TO SUPPLEMENT THEIR ALLOWANCE",
+        "corrected_output": "Grammatik",
+        "wer_asr": 0.4166666666666667,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 81,
+        "ground_truth": "Meanwhile, Ms. Choksondik dies and Cartman, Kyle and Stan think that they are responsible.",
+        "asr_output": "MEANWHILE MISS TROKSONDIT DIES AN CARTMAN COIL SAN SIGNIFLY RESPONSIBLE",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.9285714285714286,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 82,
+        "ground_truth": "The economic climate has improved.",
+        "asr_output": "THE ECONOMIC CLIMATE HAS IMPROVED",
+        "corrected_output": ": THE ECONOMIC CLIMATE HAS IMPROVED",
+        "wer_asr": 0.2,
+        "wer_corrected": 0.4
+    },
+    {
+        "id": 83,
+        "ground_truth": "The old man laid down his hand to light a cigar.",
+        "asr_output": "THE OLDER MAN LAID DOWN HIS HAND TO LIGHT A CIGAR",
+        "corrected_output": ": THE OLDER MAN LAID DOWN HIS HAND TO LIGHT A CIGAR",
+        "wer_asr": 0.18181818181818182,
+        "wer_corrected": 0.2727272727272727
+    },
+    {
+        "id": 84,
+        "ground_truth": "It has a million megapixels.",
+        "asr_output": "IT HAS A MILLION MAGAPICSOLS",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.2,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 85,
+        "ground_truth": "He is driving it in broad daylight.",
+        "asr_output": "HE IS DRIVING US IN BROAD DAYLIGHT",
+        "corrected_output": "Grammatik: HE IS DRIVING US IN BROAD DAYLIGHT",
+        "wer_asr": 0.2857142857142857,
+        "wer_corrected": 0.42857142857142855
+    },
+    {
+        "id": 86,
+        "ground_truth": "Police knew that Edward owned the items and did not want them seized.",
+        "asr_output": "POLIES KNEW THAT EDWARD OWNED THE ITEMS AND DID NOT WANT THEM SEAZED",
+        "corrected_output": ": POLIES KNEW THAT EDWARD OWNED THE ITEMS AND DID NOT WANT THEM SEAZED",
+        "wer_asr": 0.15384615384615385,
+        "wer_corrected": 0.23076923076923078
+    },
+    {
+        "id": 87,
+        "ground_truth": "Eyton.",
+        "asr_output": "ATON",
+        "corrected_output": ": ATON.",
+        "wer_asr": 1.0,
+        "wer_corrected": 2.0
+    },
+    {
+        "id": 88,
+        "ground_truth": "It was built by people associated with the railroads in Macon.",
+        "asr_output": "IT WAS FILLED BY PEOPLE ASSOCIATED WITH THE RAILROADS IN MACEN",
+        "corrected_output": "Grammatik: IT WAS FILLED by PEOPLE ASSOCIATED WITH THE RAILROADS IN MACEN",
+        "wer_asr": 0.18181818181818182,
+        "wer_corrected": 0.2727272727272727
+    },
+    {
+        "id": 89,
+        "ground_truth": "Harkness and it was named Dingo Beach.",
+        "asr_output": "HARDNESS AND IT WAS NAMED DINGLE BEACH",
+        "corrected_output": "grammar: HARDNESS AND IT WAS NAMED DINGLE BEACH",
+        "wer_asr": 0.42857142857142855,
+        "wer_corrected": 0.5714285714285714
+    },
+    {
+        "id": 90,
+        "ground_truth": "The incident was blamed on a software glitch.",
+        "asr_output": "THE INSTINCT WAS BLAMED ON A SOFTERGLIGE",
+        "corrected_output": ": THE INSTINCT WAS BLAMED ON A SOFTERGLIGE",
+        "wer_asr": 0.375,
+        "wer_corrected": 0.5
+    },
+    {
+        "id": 91,
+        "ground_truth": "In some other parts of the temple, however, the emperor is simply called \"Pharaoh\".",
+        "asr_output": "IN SOME OTHER PARTS OF THE TEMPLE HOWEVER THE IMPEROR IS SIMPLY CALLED FARO",
+        "corrected_output": "Grammatik: IN SOME OTHER PARTS OF THE TEMPLE HOWEVER THE IMPEROR IS SIMPLY CALLED FARO",
+        "wer_asr": 0.2857142857142857,
+        "wer_corrected": 0.35714285714285715
+    },
+    {
+        "id": 92,
+        "ground_truth": "They also divorced.",
+        "asr_output": "THEY ALSO DIVORCED",
+        "corrected_output": "grammar grammar: THEY ALSO DIVORCED",
+        "wer_asr": 0.3333333333333333,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 93,
+        "ground_truth": "The energy from the Sun is an example of this form of energy conversion.",
+        "asr_output": "THE ENERGY FROM TISON IS AN EXAMPLE OF THIS FORM OF ENERGY CONVERSION AGO",
+        "corrected_output": ": THE ENERGY FROM TISON IS an EXAMPLE OF THIS FORM OF ENERGY CONVERSION AGO",
+        "wer_asr": 0.2857142857142857,
+        "wer_corrected": 0.35714285714285715
+    },
+    {
+        "id": 94,
+        "ground_truth": "It is the capital of Vatovavy-Fitovinany Region.",
+        "asr_output": "IT IS THE CAPITAL VATOVAVI VITTU VINANI RIGIAN",
+        "corrected_output": "Grammatik: IT IS THE CAPITAL VATOVAVI VITTU VINANI RIGIAN",
+        "wer_asr": 0.5714285714285714,
+        "wer_corrected": 0.7142857142857143
+    },
+    {
+        "id": 95,
+        "ground_truth": "No reason, however, was given as to the change of birth years.",
+        "asr_output": "NO REASON HOWEVER WAS GIVING AS TO THE CHANGE OF BATH YEARS",
+        "corrected_output": ": NO REASON HOWEVER WAS GIVING AS TO THECHANGE OF BATH YEARS",
+        "wer_asr": 0.4166666666666667,
+        "wer_corrected": 0.6666666666666666
+    },
+    {
+        "id": 96,
+        "ground_truth": "The destroyer had a busy July.",
+        "asr_output": "THE DESTROYER ADIBISI GULA",
+        "corrected_output": "Grammatik: THE DESTROYER ADIBISI GULA",
+        "wer_asr": 0.6666666666666666,
+        "wer_corrected": 0.8333333333333334
+    },
+    {
+        "id": 97,
+        "ground_truth": "She is more popular in South Korea than in Japan.",
+        "asr_output": "SHE IS MORE POPULAR IN SOUTH GORIADAN IN JAPAN",
+        "corrected_output": "Grammatik:",
+        "wer_asr": 0.3,
+        "wer_corrected": 1.0
+    },
+    {
+        "id": 98,
+        "ground_truth": "David B. and Lewis Trondheim.",
+        "asr_output": "ERID BE EN O HIS TRON HARM",
+        "corrected_output": "Grammatik: ERID BE EN O HIS TRON HARM",
+        "wer_asr": 1.4,
+        "wer_corrected": 1.6
+    },
+    {
+        "id": 99,
+        "ground_truth": "The legs are straight, and the toes and feet are pointed.",
+        "asr_output": "DE LET SO SHADE AND DETOSA FEET ON WINETEP",
+        "corrected_output": "Grammatik: DE LET SO SHADE AND DETOSA FEET ON WINETEP",
+        "wer_asr": 0.8181818181818182,
+        "wer_corrected": 0.9090909090909091
+    }
+]
