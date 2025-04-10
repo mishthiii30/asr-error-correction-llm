@@ -1,0 +1,74 @@
+!pip install openai-whisper jiwer transformers torchaudio
+import whisper
+from google.colab import files
+from jiwer import wer
+from transformers import T5ForConditionalGeneration, T5Tokenizer
+
+# Step 1: Upload Audio File
+uploaded = files.upload()
+audio_file = list(uploaded.keys())[0]
+
+# Ground Truth Text
+ground_truth = """
+In a world of increasing complexity but decreasing free time, the role of the trusted 'explainer' has never been more important.
+Charles Duhigg is a literal prizewinner in the field and won the Pulitzer Prize for Explanatory Reporting for his team's series of articles in the New York Times explaining the (not always wonderful) impact of Apple and big tech on the global economy.
+He's also the author of the massive bestseller, The Power of Habit.
+Charles joined us in Manchester to discuss his latest research and book on Supercommunicators which strikes us as the perfect 'meta' topic for a TEDx event.
+We can all appreciate the incredible power of communication.
+But while we're all trying to communicate, some of us clearly do it better than others.
+Why? According to Charles' latest work, supercommunicators understand that whenever we speak, we're actually participating in one of three conversations:
+practical (What's this really about?), emotional (How do we feel?), and social (Who are we?).
+If you don't know what kind of conversation you're having, you're unlikely to connect.
+'Supercommunicators' know the importance of recognizing—and then matching—each kind of conversation and how to hear the complex emotions, subtle negotiations, and deeply held beliefs that color so much of what we say and how we listen.
+He says that our experiences, our values, our emotional lives—and how we see ourselves and others—shape every discussion, from who will pick up the kids to how we want to be treated at work.
+Learn why some people are able to make themselves heard, and to hear others, so clearly.
+Charles Duhigg is a Pulitzer Prize-winning investigative reporter and the author of the international bestsellers The Power of Habit and Smarter Faster Better.
+"""
+
+# Function to Calculate WER
+def calculate_wer(reference, hypothesis):
+    return wer(reference, hypothesis)
+
+# --- Step 2: Whisper ASR (Base Model) ---
+print("\n=== Whisper ASR (Base Model) ===")
+whisper_model = whisper.load_model("base")
+whisper_result = whisper_model.transcribe(audio_file)
+whisper_transcript = whisper_result["text"]
+print("Whisper Transcript:")
+print(whisper_transcript)
+
+# Calculate WER for Whisper
+wer_whisper = calculate_wer(ground_truth, whisper_transcript)
+print(f"\nWhisper WER: {wer_whisper:.4f}")
+
+# --- Step 3: T5 Text Correction ---
+print("\n=== T5 Text Correction ===")
+tokenizer = T5Tokenizer.from_pretrained("t5-base")
+model = T5ForConditionalGeneration.from_pretrained("t5-base")
+
+# Define T5 task (correct grammar/spelling while preserving content)
+input_text = f"fix grammar and spelling errors in this transcript: {whisper_transcript[:512]}"  # Truncate to 512 tokens
+input_ids = tokenizer.encode(input_text, return_tensors="pt")
+
+# Generate corrected text
+outputs = model.generate(input_ids, max_length=512)
+t5_corrected = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print("\nT5-Corrected Transcript:")
+print(t5_corrected)
+
+# Calculate WER for T5-corrected text
+wer_t5 = calculate_wer(ground_truth, t5_corrected)
+print(f"\nT5-Corrected WER: {wer_t5:.4f}")
+
+# --- Step 4: Compare Results ---
+print("\n=== WER Comparison ===")
+print(f"Whisper (Raw ASR) WER: {wer_whisper:.4f}")
+print(f"Whisper + T5 (Corrected) WER: {wer_t5:.4f}")
+
+if wer_t5 < wer_whisper:
+    improvement = (wer_whisper - wer_t5) / wer_whisper * 100
+    print(f"\n✅ T5 improved WER by {improvement:.2f}%")
+else:
+    print("\n❌ T5 did not improve WER (try a larger T5 model or different prompt)")
+'''result obtained was that T5 did not improve WER.'''
+
