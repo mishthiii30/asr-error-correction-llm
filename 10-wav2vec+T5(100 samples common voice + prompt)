@@ -1,0 +1,117 @@
+# Install and authenticate
+from huggingface_hub import login
+
+login(token="hugging face login token here")
+
+!pip install datasets transformers torchaudio jiwer --quiet
+
+# Imports
+import torch
+import torchaudio
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor, AutoTokenizer, AutoModelForSeq2SeqLM
+from datasets import load_dataset, Audio
+from jiwer import wer
+import itertools
+import json
+import time
+
+# Load Wav2Vec2 Model and Processor
+asr_model_id = "facebook/wav2vec2-base-960h"
+asr_processor = Wav2Vec2Processor.from_pretrained(asr_model_id)
+asr_model = Wav2Vec2ForCTC.from_pretrained(asr_model_id)
+asr_model.eval()
+
+# Load T5 (error correction) Model and Tokenizer
+t5_model_id = "t5-small"
+t5_tokenizer = AutoTokenizer.from_pretrained(t5_model_id)
+t5_model = AutoModelForSeq2SeqLM.from_pretrained(t5_model_id)
+t5_model.eval()
+
+# Stream Common Voice English dataset
+dataset = load_dataset("mozilla-foundation/common_voice_13_0", "en", split="train", streaming=True)
+dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
+streamed_samples = list(itertools.islice(dataset, 100))
+
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+asr_model = asr_model.to(device)
+t5_model = t5_model.to(device)
+
+# Store results
+results = []
+
+print("Processing 100 streamed samples...\n")
+
+for i, sample in enumerate(streamed_samples):
+    try:
+        audio = sample["audio"]["array"]
+        ground_truth = sample["sentence"]
+
+        # ASR Inference
+        input_values = asr_processor(audio, return_tensors="pt", sampling_rate=16000).input_values.to(device)
+        with torch.no_grad():
+            logits = asr_model(input_values).logits
+        predicted_ids = torch.argmax(logits, dim=-1)
+        asr_output = asr_processor.batch_decode(predicted_ids)[0].strip()
+
+        # T5 Error Correction
+        input_text = f"grammar: {asr_output}"
+        input_ids = t5_tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True).input_ids.to(device)
+        
+        with torch.no_grad():
+            outputs = t5_model.generate(
+                input_ids,
+                max_length=512,
+                num_beams=4,
+                early_stopping=True,
+                repetition_penalty=2.5
+            )
+            
+        corrected_output = t5_tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
+
+        # Calculate WERs
+        wer_asr = wer(ground_truth.lower(), asr_output.lower())
+        wer_corrected = wer(ground_truth.lower(), corrected_output.lower())
+
+        # Save result
+        results.append({
+            "id": i,
+            "ground_truth": ground_truth,
+            "asr_output": asr_output,
+            "corrected_output": corrected_output,
+            "wer_asr": wer_asr,
+            "wer_corrected": wer_corrected
+        })
+
+        print(f"Sample {i+1}/100 processed - ASR WER: {wer_asr:.2f}, Corrected WER: {wer_corrected:.2f}")
+
+    except Exception as e:
+        print(f"Error at sample {i}: {e}")
+        results.append({
+            "id": i,
+            "ground_truth": ground_truth if 'ground_truth' in locals() else "Error",
+            "asr_output": asr_output if 'asr_output' in locals() else "Error",
+            "corrected_output": corrected_output if 'corrected_output' in locals() else "Error",
+            "wer_asr": 1.0,
+            "wer_corrected": 1.0
+        })
+
+# Save to JSON with timestamp
+timestamp = int(time.time())
+output_filename = f"asr_results_{timestamp}.json"
+
+with open(output_filename, "w", encoding="utf-8") as f:
+    json.dump(results, f, indent=4)
+
+# Print WER summary
+successful_results = [r for r in results if not isinstance(r['wer_asr'], str)]
+if successful_results:
+    avg_wer_asr = sum(r["wer_asr"] for r in successful_results) / len(successful_results)
+    avg_wer_corrected = sum(r["wer_corrected"] for r in successful_results) / len(successful_results)
+
+    print(f"\nAverage WER (ASR): {avg_wer_asr:.4f}")
+    print(f"Average WER (Corrected): {avg_wer_corrected:.4f}")
+else:
+    print("\nNo successful results to calculate WER averages")
+
+print(f"✅ Output saved to '{output_filename}'")
