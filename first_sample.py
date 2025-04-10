@@ -118,3 +118,9 @@ wer_wav2vec = wer(ground_truth.lower(), wav2vec_text.lower())
 print("\n📊 Evaluation Results:")
 print(f"🔹 Word Error Rate (Whisper): {wer_whisper:.2f}")
 print(f"🔹 Word Error Rate (Wav2Vec2): {wer_wav2vec:.2f}")
+
+'''ASR Model Performance Analysis
+
+Whisper and Wav2Vec performance was checked on clean and noisy versions of the **same audio**:
+- **Whisper** WER went from **0.90 to 0.13**
+- **Wav2Vec** WER went from **0.35 to 0.78**'''
