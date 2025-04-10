@@ -1,0 +1,92 @@
+# Step 1: Install Required Libraries
+!pip install torch torchaudio jiwer git+https://github.com/openai/whisper.git
+!sudo apt update && sudo apt install ffmpeg -y
+
+# Step 2: Import Libraries
+import torch
+import torchaudio
+import whisper
+import numpy as np
+from jiwer import wer
+import os
+
+# Step 3: Configuration
+CONFIG = {
+    "model_size": "base.en",  # Whisper model to use
+    "dataset_path": "./librispeech",  # Path to store dataset
+    "max_samples": 10  # Number of samples to process
+}
+
+# Step 4: Verify Whisper Installation
+def verify_environment():
+    try:
+        print(f"Whisper version: {whisper.__version__}")
+        print(f"Available models: {whisper.available_models()}")
+    except AttributeError:
+        raise RuntimeError("Whisper not installed properly! Re-run Step 1.")
+
+verify_environment()
+
+# Step 5: Load Whisper Model
+print("\nLoading Whisper model...")
+model = whisper.load_model(CONFIG["model_size"])
+
+# Step 6: Create Dataset Directory
+os.makedirs(CONFIG["dataset_path"], exist_ok=True)
+print(f"Created dataset directory: {CONFIG['dataset_path']}")
+
+# Step 7: Load LibriSpeech Dataset
+print("\nLoading LibriSpeech dataset...")
+try:
+    librispeech_dataset = torchaudio.datasets.LIBRISPEECH(
+        root=CONFIG["dataset_path"],
+        url="test-clean",
+        download=True,
+        folder_in_archive="LibriSpeech"
+    )
+    print("Dataset loaded successfully!")
+except Exception as e:
+    print(f"⚠️ Error loading dataset: {str(e)}")
+    raise
+
+# Step 8: Define Helper Functions
+def transcribe_audio(waveform, sample_rate):
+    """Transcribe audio using Whisper."""
+    audio = waveform.numpy().squeeze().astype(np.float32)
+    result = model.transcribe(audio, fp16=torch.cuda.is_available())
+    return result["text"]
+
+def normalize_text(text):
+    """Normalize text for WER calculation."""
+    return text.strip().lower()
+
+# Step 9: Process Samples and Compute WER
+print(f"\nProcessing {CONFIG['max_samples']} samples...")
+wer_scores = []
+
+for idx in range(CONFIG["max_samples"]):
+    try:
+        # Load audio and ground truth
+        waveform, sample_rate, text, *_ = librispeech_dataset[idx]
+
+        # Transcribe audio
+        transcript = transcribe_audio(waveform, sample_rate)
+
+        # Normalize text
+        gt_clean = normalize_text(text)
+        pred_clean = normalize_text(transcript)
+
+        # Compute WER
+        wer_score = wer(gt_clean, pred_clean)
+        wer_scores.append(wer_score)
+
+        # Print results for this sample
+        print(f"\nSample {idx + 1}:")
+        print(f"Ground Truth: {gt_clean}")
+        print(f"Prediction: {pred_clean}")
+        print(f"WER: {wer_score:.2%}")
+        print("-" * 60)
+
+    except Exception as e:
+        print(f"⚠️ Error processing sample {idx + 1}: {str(e)}")
+        continue
