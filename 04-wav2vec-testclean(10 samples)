@@ -1,0 +1,120 @@
+# Step 1: Install required libraries
+!pip install torch torchaudio transformers jiwer
+
+# Step 2: Load the Wav2Vec model
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+model_name = "facebook/wav2vec2-large-960h"
+processor = Wav2Vec2Processor.from_pretrained(model_name)
+model = Wav2Vec2ForCTC.from_pretrained(model_name)
+
+# Step 3: Download and verify the LibriSpeech dataset
+import torchaudio.datasets as datasets
+import os
+
+dataset_path = "./LibriSpeech"
+
+# Create the directory if it doesn't exist
+os.makedirs(dataset_path, exist_ok=True)
+
+# Check if the dataset already exists
+if not os.path.exists(os.path.join(dataset_path, "test-clean")):
+    print("Downloading LibriSpeech test-clean dataset...")
+    librispeech_dataset = datasets.LIBRISPEECH(root=dataset_path, url="test-clean", download=True)
+else:
+    print("LibriSpeech test-clean dataset already exists.")
+    librispeech_dataset = datasets.LIBRISPEECH(root=dataset_path, url="test-clean", download=False)
+
+# Verify the dataset
+print("Dataset loaded successfully.")
+print(f"Number of samples in test-clean: {len(librispeech_dataset)}")
+
+# Step 4: Transcribe audio
+import torch
+import torchaudio
+from jiwer import wer
+
+def transcribe_audio(waveform, sample_rate):
+    if sample_rate != 16000:
+        resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
+        waveform = resampler(waveform)
+        sample_rate = 16000
+    inputs = processor(waveform.squeeze().numpy(), sampling_rate=sample_rate, return_tensors="pt", padding=True)
+    with torch.no_grad():
+        logits = model(inputs.input_values).logits
+        predicted_ids = torch.argmax(logits, dim=-1)
+        transcription = processor.decode(predicted_ids[0])
+    return transcription
+
+# Step 5: Preprocess text to include punctuation as separate tokens
+def preprocess_text(text):
+    # Add spaces around punctuation marks
+    text = text.replace(",", " , ").replace(".", " . ").replace("!", " ! ").replace("?", " ? ")
+    # Normalize whitespace
+    text = " ".join(text.split())
+    return text
+
+# Step 6: Process all samples and save intermediate results
+import pickle
+
+# File to save intermediate results
+results_file = "librispeech_results.pkl"
+
+# Check if results already exist
+if os.path.exists(results_file):
+    print("Loading existing results...")
+    with open(results_file, "rb") as f:
+        results = pickle.load(f)
+else:
+    print("Processing all samples...")
+    results = []
+
+    # Process all samples
+    for idx in range(min(300, len(librispeech_dataset))):
+        try:
+            waveform, sample_rate, ground_truth, _, _, _ = librispeech_dataset[idx]
+
+            # Preprocess ground truth to include punctuation
+            ground_truth_processed = preprocess_text(ground_truth)
+
+            # Transcribe audio
+            transcription = transcribe_audio(waveform, sample_rate)
+
+            # Preprocess predicted transcript to include punctuation
+            transcription_processed = preprocess_text(transcription)
+
+            # Calculate WER
+            wer_score = wer(ground_truth_processed, transcription_processed)
+
+            # Append results
+            results.append((ground_truth_processed, transcription_processed, wer_score))
+
+            # Print progress every 10 samples
+            if (idx + 1) % 10 == 0:
+                print(f"Processed {idx + 1}/{min(300, len(librispeech_dataset))} samples...")
+
+            # Save intermediate results every 100 samples
+            if (idx + 1) % 100 == 0:
+                print(f"Checkpoint saved at {idx + 1} samples.")
+                with open(results_file, "wb") as f:
+                    pickle.dump(results, f)
+
+        except Exception as e:
+            print(f"Error processing sample {idx}: {e}")
+
+    # Save final results
+    with open(results_file, "wb") as f:
+        pickle.dump(results, f)
+
+# Step 7: Display results for the first 10 samples
+for i, (ground_truth_processed, transcription_processed, wer_score) in enumerate(results[:10]):
+    print(f"Sample {i + 1}:")
+    print("Ground Truth:", ground_truth_processed)
+    print("Predicted Transcript:", transcription_processed)
+    print(f"WER (including punctuation): {wer_score:.4f}")
+    print()
+
+# Step 8: Compute median WER for all samples
+import numpy as np
+wer_scores = [result[2] for result in results]
+median_wer = np.median(wer_scores)
+print(f"Median WER (including punctuation) for all samples: {median_wer:.4f}")
