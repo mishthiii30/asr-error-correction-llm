@@ -1,0 +1,55 @@
+!pip install git+https://github.com/openai/whisper.git
+!pip install torchaudio jiwer
+import torch
+import whisper
+import torchaudio
+from torchaudio.datasets import LIBRISPEECH
+from jiwer import wer
+import warnings
+
+# Suppress FP16 warning
+warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
+
+# Load Whisper model (you can change 'base' to 'small', 'medium', or 'large')
+model = whisper.load_model("base")
+
+def transcribe_audio(file_path):
+    """Transcribes audio using Whisper."""
+    result = model.transcribe(file_path, fp16=False)  # Force FP32 mode
+    return result["text"].strip()
+
+# Load LibriSpeech test-other dataset
+dataset = LIBRISPEECH("./", url="test-other", download=True)
+
+results = []
+
+for i in range(len(dataset)):
+    waveform, sample_rate, transcript, _, _, _ = dataset[i]
+    file_path = f"temp_{i}.wav"
+
+    # Save the audio to a temporary file for Whisper
+    torchaudio.save(file_path, waveform, sample_rate)
+
+    # Transcribe using Whisper
+    whisper_text = transcribe_audio(file_path)
+
+    # Compute WER
+    error_rate = wer(transcript.lower(), whisper_text.lower())
+
+    # Store results
+    results.append({
+        "index": i,
+        "WER": error_rate,
+        "Reference": transcript,
+        "Whisper Output": whisper_text
+    })
+
+    # Print reference text and Whisper output
+    print(f"Sample {i}: WER = {error_rate:.3f}")
+    print(f"Reference: {transcript}")
+    print(f"Whisper Output: {whisper_text}\n")
+
+# Display results
+import pandas as pd
+results_df = pd.DataFrame(results)
+display(results_df)
