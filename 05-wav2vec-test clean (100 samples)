@@ -1,0 +1,120 @@
+# Step 1: Install required libraries
+!pip install torch torchaudio transformers jiwer
+
+# Step 2: Load the Wav2Vec model
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+model_name = "facebook/wav2vec2-large-960h"
+processor = Wav2Vec2Processor.from_pretrained(model_name)
+model = Wav2Vec2ForCTC.from_pretrained(model_name)
+
+# Step 3: Download and verify the LibriSpeech dataset
+import torchaudio.datasets as datasets
+import os
+
+dataset_path = "./LibriSpeech"
+os.makedirs(dataset_path, exist_ok=True)
+if not os.path.exists(os.path.join(dataset_path, "test-clean")):
+    print("Downloading LibriSpeech test-clean dataset...")
+    librispeech_dataset = datasets.LIBRISPEECH(root=dataset_path, url="test-clean", download=True)
+else:
+    print("LibriSpeech test-clean dataset already exists.")
+    librispeech_dataset = datasets.LIBRISPEECH(root=dataset_path, url="test-clean", download=False)
+
+print("Dataset loaded successfully.")
+print(f"Number of samples in test-clean: {len(librispeech_dataset)}")
+
+# Step 4: Transcribe audio using Wav2Vec2
+import torch
+from jiwer import wer
+
+def transcribe_audio(waveform, sample_rate):
+    if sample_rate != 16000:
+        resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
+        waveform = resampler(waveform)
+        sample_rate = 16000
+    inputs = processor(waveform.squeeze().numpy(), sampling_rate=sample_rate, return_tensors="pt", padding=True)
+    with torch.no_grad():
+        logits = model(inputs.input_values).logits
+        predicted_ids = torch.argmax(logits, dim=-1)
+        transcription = processor.decode(predicted_ids[0])
+    return transcription
+
+# Step 5: Preprocess text to include punctuation as separate tokens
+def preprocess_text(text):
+    # Add spaces around punctuation marks
+    text = text.replace(",", " , ").replace(".", " . ").replace("!", " ! ").replace("?", " ? ")
+    # Normalize whitespace
+    text = " ".join(text.split())
+    return text
+
+# -------------------------------
+# New: Integrate BART for Error Correction
+from transformers import BartForConditionalGeneration, BartTokenizer
+
+bart_model_name = "facebook/bart-base"
+bart_tokenizer = BartTokenizer.from_pretrained(bart_model_name)
+bart_model = BartForConditionalGeneration.from_pretrained(bart_model_name)
+
+def correct_transcription(asr_output):
+    prompt = f"Correct the following transcription errors and output the corrected text  :\n\nASR Output: {asr_output}\n\nCorrected Output:"
+    inputs = bart_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
+    with torch.no_grad():
+        outputs = bart_model.generate(**inputs, max_length=1024, num_beams=5, early_stopping=True)
+    corrected_text = bart_tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return corrected_text
+
+# -------------------------------
+# Step 6: Process samples, printing WER for both raw and corrected transcriptions
+import pickle
+results_file = "librispeech_results.pkl"
+results = []  # Will store tuples: (ground truth, raw transcription, corrected transcription, raw_wer, corr_wer)
+
+# Process 100 samples
+num_samples = min(100, len(librispeech_dataset))
+for idx in range(num_samples):
+    try:
+        waveform, sample_rate, ground_truth, *_ = librispeech_dataset[idx]
+
+        # Preprocess ground truth
+        ground_truth_processed = preprocess_text(ground_truth)
+
+        # Transcribe audio using Wav2Vec2
+        transcription = transcribe_audio(waveform, sample_rate)
+        transcription_processed = preprocess_text(transcription)
+
+        # Correct transcription using BART
+        corrected_transcription = correct_transcription(transcription_processed)
+        corrected_transcription_processed = preprocess_text(corrected_transcription)
+
+        # Calculate WER for raw and corrected outputs
+        raw_wer = wer(ground_truth_processed, transcription_processed)
+        corr_wer = wer(ground_truth_processed, corrected_transcription_processed)
+
+        # Append results
+        results.append((ground_truth_processed, transcription_processed, corrected_transcription_processed, raw_wer, corr_wer))
+
+        # Print results immediately for this sample
+        print(f"Sample {idx + 1}:")
+        print("Ground Truth:", ground_truth_processed)
+        print("Raw Transcription:", transcription_processed)
+        print("Corrected Transcription:", corrected_transcription_processed)
+        print(f"WER (Raw): {raw_wer:.4f}")
+        print(f"WER (Corrected): {corr_wer:.4f}")
+        print("-" * 40)
+
+    except Exception as e:
+        print(f"Error processing sample {idx + 1}: {e}")
+        continue
+
+# Save the results (optional)
+with open(results_file, "wb") as f:
+    pickle.dump(results, f)
+
+# Step 7: Compute and print average WER for all samples
+import numpy as np
+raw_wer_scores = [result[3] for result in results]
+corr_wer_scores = [result[4] for result in results]
+average_raw_wer = np.mean(raw_wer_scores)
+average_corr_wer = np.mean(corr_wer_scores)
+print(f"Average WER (Raw) for all {num_samples} samples: {average_raw_wer:.4f}")
+print(f"Average WER (Corrected) for all {num_samples} samples: {average_corr_wer:.4f}")
