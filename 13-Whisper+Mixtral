@@ -144,3 +144,5 @@ print("\n\033[1mFinal Report:\033[0m")
 print(f"Average WER (Original): {avg_whisper_wer*100:.1f}%")
 print(f"Average WER (Corrected): {avg_final_wer*100:.1f}%")
 print(f"Effective Improvement: {improvement:.1f}%")
+
+'''WER before LLM was found to be 0.61 and after LLM, it got improved and was 0.60, improvement of 0.15 was observed.'''
