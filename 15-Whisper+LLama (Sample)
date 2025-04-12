@@ -1,0 +1,22 @@
+import whisper
+import ollama
+
+# Step 1: Transcribe the audio file with Whisper
+model = whisper.load_model("medium")  
+result = model.transcribe("C:\\Users\\kaush\\Downloads\\vardan peer 5.unknown")
+transcript = result["text"]
+
+# Step 2: Use Llama 3 (8B) to improve the transcript
+response = ollama.chat(model="llama3:8b", messages=[
+    {"role": "user", "content": f"Fix any grammatical errors in this transcript:\n{transcript}"}
+])
+
+corrected_transcript = response['message']['content']
+
+# Print and save the corrected transcript
+print("Corrected Transcript:", corrected_transcript)
+
+with open("corrected_transcript.txt", "w", encoding="utf-8") as file:
+    file.write(corrected_transcript)
+
+print("Process completed. Corrected transcript saved.")
