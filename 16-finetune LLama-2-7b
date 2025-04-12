@@ -1,0 +1,279 @@
+!pip install datasets
+!pip install --upgrade unsloth
+import unsloth  # 🚨 Must be first!
+from unsloth import FastLanguageModel
+import os
+import tarfile
+import json
+import pandas as pd
+from datasets import Dataset, DatasetDict
+pip uninstall torch torchvision -y
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+!pip install trl
+from trl import SFTTrainer  # Should work now
+print("SFTTrainer imported successfully!")
+import torch
+import os
+import json
+import pandas as pd
+from datasets import Dataset, DatasetDict
+from datasets import load_dataset
+from huggingface_hub import notebook_login
+from transformers import TrainingArguments
+from trl import SFTTrainer
+# from unsloth import FastLanguageModel
+notebook_login()
+from google.colab import drive
+drive.mount('/content/drive')
+import os
+import json
+import pandas as pd
+from datasets import Dataset, DatasetDict
+# Step 1: Process Transcripts & Convert to JSON
+def parse_transcripts(extract_path):
+    dataset = []
+    for root, _, files in os.walk(extract_path):
+        for file in files:
+            if file.endswith(".trans.txt"):  # Transcription file
+                with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+                    for line in f:
+                        parts = line.strip().split(" ", 1)
+                        if len(parts) == 2:
+                            audio_id, transcript = parts
+                            dataset.append({
+                                "instruction": "Transcribe the following audio:",
+                                "input": f"Audio File: {audio_id}.flac",
+                                "output": transcript
+                            })
+    print(f"✅ Total parsed: {len(dataset)} samples")
+    return dataset
+
+# Step 2: Convert to Llama 3 Format
+def convert_to_llama3(dataset):
+    prompts = []
+    for row in dataset:
+        prompt = (
+            f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{row['instruction']}"
+            f"<|eot_id|><|start_header_id|>user<|end_header_id|>{row['input']}"
+            f"<|eot_id|><|start_header_id|>assistant<|end_header_id|>{row['output']}<|eot_id|>"
+        )
+        prompts.append(prompt)
+    return pd.DataFrame({'prompt': prompts})
+# Step 3: Create Hugging Face Dataset
+def create_dataset_hf(dataset):
+    dataset.reset_index(drop=True, inplace=True)
+    return DatasetDict({"train": Dataset.from_pandas(dataset)})
+# ✅ Main Execution
+if _name_ == "_main_":
+
+    extract_path = "/content/drive/MyDrive/devclean" # Folder path since it's already extracted
+
+    # # Checking the type of dataset
+    # print("📁 Listing files in extract_path:")
+    # for root, dirs, files in os.walk(extract_path):
+    #     print(f"Found directory: {root}")
+    #     for file in files:
+    #         print(" -", file)
+
+
+    # Step 1: Parse transcripts
+    data = parse_transcripts(extract_path)
+
+    # Step 2: Convert to Llama 3 format
+    llama3_df = convert_to_llama3(data)
+
+    # Step 3: Save JSON File
+    with open("llama3_librispeech.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+    # Step 4: Convert to Hugging Face Dataset
+    hf_dataset = create_dataset_hf(llama3_df)
+    hf_dataset.save_to_disk("processed_librispeech")
+
+    print("✅ Dataset processing complete!")
+
+# Zip the folder
+!zip -r processed_librispeech.zip /content/processed_librispeech
+# Download the zip
+from google.colab import files
+files.download("processed_librispeech.zip")
+
+from datasets import load_from_disk
+
+ds = load_from_disk("processed_librispeech")
+print(ds)
+print(ds["train"][0])
+
+import torch
+
+# Defining the configuration for the base model, LoRA, and training
+config = {
+    "hugging_face_username": "KaushikAK",  # Your Hugging Face username
+    "model_config": {
+        "base_model": "unsloth/llama-3-8b-Instruct-bnb-4bit",  # The base model
+        "finetuned_model": "llama-3-8b-Instruct-bnb-4bit-KaushikAK-demo",  # The finetuned model
+        "max_seq_length": 2048,  # The maximum sequence length
+        "dtype": torch.float16,  # The data type
+        "load_in_4bit": True,  # Load the model in 4-bit
+    },
+    "lora_config": {
+        "r": 16,  # The number of LoRA layers: 8, 16, 32, 64
+        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj",
+                           "gate_proj", "up_proj", "down_proj"],  # The target modules
+        "lora_alpha": 16,  # The alpha value for LoRA
+        "lora_dropout": 0,  # The dropout value for LoRA
+        "bias": "none",  # The bias for LoRA
+        "use_gradient_checkpointing": True,  # Use gradient checkpointing
+        "use_rslora": False,  # Use RSLora
+        "use_dora": False,  # Use DoRa
+        "loftq_config": None  # The LoFTQ configuration
+    },
+    "training_dataset": {
+        "name": "lokeshkumar79/processed_librispeech",  # Your dataset on Hugging Face
+        "split": "train",  # The dataset split
+        "input_field": "prompt",  # The input field
+    },
+    "training_config": {
+        "per_device_train_batch_size": 2,  # The batch size
+        "gradient_accumulation_steps": 4,  # The gradient accumulation steps
+        "warmup_steps": 5,  # The warmup steps
+        "max_steps": 0,  # The maximum steps (0 if the epochs are defined)
+        "num_train_epochs": 10,  # The number of training epochs (0 if max_steps is defined)
+        "learning_rate": 2e-4,  # The learning rate
+        # "fp16": not torch.cuda.is_bf16_supported(),  # Use fp16 if bf16 is not supported
+        # "bf16": torch.cuda.is_bf16_supported(),  # Use bf16 if supported
+        "fp16": True,
+        "bf16": False,
+        "logging_steps": 1,  # The logging steps
+        "optim": "adamw_8bit",  # The optimizer
+        "weight_decay": 0.01,  # The weight decay
+        "lr_scheduler_type": "linear",  # The learning rate scheduler
+        "seed": 42,  # The seed
+        "output_dir": "outputs",  # The output directory
+    }
+}
+
+# 1. Verify CUDA and installs
+print(f"PyTorch: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+
+import torch
+from unsloth import FastLanguageModel
+
+# 1. First clear GPU memory
+torch.cuda.empty_cache()
+
+# 2. Load a smaller model variant with optimized settings
+try:
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name="unsloth/llama-2-7b-bnb-4bit",  # Smaller than Mistral
+        max_seq_length=768,  # Reduced sequence length
+        dtype=None,  # Automatic dtype selection
+        load_in_4bit=True,
+        device_map="balanced_low_0",  # Optimized device placement
+    )
+
+    # 3. Apply memory-efficient LoRA configuration
+    model = FastLanguageModel.get_peft_model(
+        model,
+        r=8,  # Lower rank to save memory
+        target_modules=["q_proj", "v_proj"],  # Fewer target modules
+        lora_alpha=16,
+        use_gradient_checkpointing="unsloth",  # Special memory optimization
+        random_state=42,
+    )
+
+    print("Model successfully loaded!")
+    print(f"GPU Memory allocated: {torch.cuda.memory_allocated()/1e9:.2f} GB")
+
+except Exception as e:
+    print(f"Error loading model: {e}")
+    print("Trying ultra-low-memory configuration...")
+
+    # 4. Fallback to even more aggressive settings
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name="unsloth/tinyllama-bnb-4bit",  # Very small 1.1B parameter model
+        max_seq_length=512,
+        load_in_4bit=True,
+        device_map={"":0},  # Force to GPU 0
+    )
+
+def formatting_func(example):
+    prompt = example.get("prompt", "")
+    return [prompt + tokenizer.eos_token]
+
+# # Setup for QLoRA/LoRA peft of the base model
+# model = FastLanguageModel.get_peft_model(
+#     model,
+#     r = config.get("lora_config").get("r"),
+#     target_modules = config.get("lora_config").get("target_modules"),
+#     lora_alpha = config.get("lora_config").get("lora_alpha"),
+#     lora_dropout = config.get("lora_config").get("lora_dropout"),
+#     bias = config.get("lora_config").get("bias"),
+#     use_gradient_checkpointing = config.get("lora_config").get("use_gradient_checkpointing"),
+#     random_state = 42,
+#     use_rslora = config.get("lora_config").get("use_rslora"),
+#     use_dora = config.get("lora_config").get("use_dora"),
+#     loftq_config = config.get("lora_config").get("loftq_config"),
+# )
+
+# Loading the training dataset
+dataset_train = load_dataset(config.get("training_dataset").get("name"), split = config.get("training_dataset").get("split"))
+# dataset_train = load_dataset(config.get("training_dataset").get("name"), split='train')
+
+
+# Setting up the trainer for the model
+from trl import SFTTrainer
+from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("unsloth/llama-2-7b-bnb-4bit")
+trainer = SFTTrainer(
+    model = model,
+    tokenizer = tokenizer,
+    train_dataset = dataset_train,
+    formatting_func = formatting_func,
+    dataset_text_field = config.get("training_dataset").get("input_field"),
+    max_seq_length = config.get("model_config").get("max_seq_length"),
+    dataset_num_proc = 2,
+    packing = False,
+    args = TrainingArguments(
+        per_device_train_batch_size = config.get("training_config").get("per_device_train_batch_size"),
+        gradient_accumulation_steps = config.get("training_config").get("gradient_accumulation_steps"),
+        warmup_steps = config.get("training_config").get("warmup_steps"),
+        max_steps = config.get("training_config").get("max_steps"),
+        num_train_epochs= config.get("training_config").get("num_train_epochs"),
+        learning_rate = config.get("training_config").get("learning_rate"),
+        fp16 = config.get("training_config").get("fp16"),
+        bf16 = config.get("training_config").get("bf16"),
+        logging_steps = config.get("training_config").get("logging_steps"),
+        optim = config.get("training_config").get("optim"),
+        weight_decay = config.get("training_config").get("weight_decay"),
+        lr_scheduler_type = config.get("training_config").get("lr_scheduler_type"),
+        seed = 42,
+        output_dir = config.get("training_config").get("output_dir"),
+    ),
+)
+
+model.save_pretrained_gguf(config.get("model_config").get("finetuned_model"), tokenizer, quantization_method = "q4_k_m")
+# model.push_to_hub_gguf(config.get("model_config").get("finetuned_model"), tokenizer, quantization_method = "q4_k_m")
+# Loading the fine-tuned model and the tokenizer for inference
+model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name = config.get("model_config").get("finetuned_model"),
+        max_seq_length = config.get("model_config").get("max_seq_length"),
+        dtype = config.get("model_config").get("dtype"),
+        load_in_4bit = config.get("model_config").get("load_in_4bit"),
+    )
+
+# Using FastLanguageModel for fast inference
+FastLanguageModel.for_inference(model)
+
+system_prompt = f"You are an AI task automator. You will take a users prompt and use first principle reasoning to break the prompt into tasks that you must accomplish within another chat. RESPOND TO THIS MESSAGE ONLY WITH A PYTHON FORMATTED LIST OF TASKS THAT YOU MUST COMPLETE TO TRUTHFULLY AND INTELLIGENTLY ACCOMPLISH THE USERS REQUEST. ASSUME YOU CAN SEARCH THE WEB, WRITE CODE, RUN CODE, DEBUG CODE, AND AUTOMATE ANYTHING ON THE USERS COMPUTER TO ACCOMPLISH THE PROMPT. CORRECT RESPONSE FORMAT: ['task 1', 'task 2', 'task 3']"
+
+# Tokenizing the input and generating the output
+prompt = input('TYPE PROMPT TO LLAMA3: ')
+inputs = tokenizer(
+[
+    f"<|start_header_id|>system<|end_header_id|>{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>{prompt}<|end_header_id|>"
+], return_tensors = "pt").to("cuda")
+outputs = model.generate(**inputs, max_new_tokens = 256, use_cache = True)
+tokenizer.batch_decode(outputs, skip_special_tokens = True)
