@@ -1,0 +1,72 @@
+from google.colab import files
+uploaded = files.upload()
+
+import json
+
+file_name = list(uploaded.keys())[0]  # Gets the uploaded filename
+with open(file_name, "r") as f:
+    data = json.load(f)
+
+# Quick peek at the first sample
+print(data[0])
+
+!pip install -q transformers datasets sentencepiece
+
+from datasets import Dataset
+
+# Format for T5: Input = "fix: [prediction]", Target = "[ground_truth]"
+formatted_data = {
+    "input_text": [f"error correction: {item['prediction']}" for item in data],
+    "target_text": [item['ground_truth'] for item in data]
+}
+
+dataset = Dataset.from_dict(formatted_data)
+
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+
+model_name = "t5-base"  # or your fine-tuned checkpoint path if you have one
+tokenizer = T5Tokenizer.from_pretrained(model_name)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+def preprocess(example):
+    model_inputs = tokenizer(
+        example["input_text"], max_length=128, padding="max_length", truncation=True
+    )
+
+    labels = tokenizer(
+        example["target_text"], max_length=128, padding="max_length", truncation=True
+    )
+    model_inputs["labels"] = labels["input_ids"]
+    return model_inputs
+
+tokenized_dataset = dataset.map(preprocess, batched=True)
+
+from transformers import TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir="./t5-finetuned-asrr",
+    per_device_train_batch_size=8,
+    num_train_epochs=3,
+    learning_rate=3e-4,
+    logging_dir="./logs",
+    logging_steps=10,
+    save_total_limit=1,
+    save_steps=500,
+    evaluation_strategy="no",  # You can change this later if you have a validation set
+    weight_decay=0.01,
+    push_to_hub=False
+)
+
+!pip install -U wandb
+import wandb
+wandb.login()
+
+from transformers import Trainer
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset,
+)
+
+trainer.train()
