@@ -1,0 +1,106 @@
+!pip install torch torchaudio transformers librosa soundfile datasets ollama
+import os
+import torch
+import librosa
+import soundfile as sf
+from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
+
+# Load Wav2Vec 2.0 model and processor
+print("Loading Wav2Vec 2.0 model...")
+model_name = "facebook/wav2vec2-large-960h"
+processor = Wav2Vec2Processor.from_pretrained(model_name)
+model = Wav2Vec2ForCTC.from_pretrained(model_name)
+
+# Function to transcribe audio using Wav2Vec 2.0
+def transcribe_audio(audio_path):
+    if not os.path.exists(audio_path):
+        print(f"Error: File '{audio_path}' not found!")
+        return ""
+
+    print(f"Processing: {audio_path}")
+    speech_array, sampling_rate = librosa.load(audio_path, sr=16000)
+
+    input_values = processor(speech_array, return_tensors="pt", sampling_rate=16000).input_values
+
+    # Perform inference
+    with torch.no_grad():
+        logits = model(input_values).logits
+
+    # Decode output
+    predicted_ids = torch.argmax(logits, dim=-1)
+    transcription = processor.batch_decode(predicted_ids)[0]
+
+    print(f"Transcript: {transcription}")
+    return transcription
+
+# 🔹 Replace with your actual file path
+audio_file = r"C:\Users\kaush\Downloads\WhatsApp Audio 2025-01-23 at 17.07.54_290ca586.dat.unknown"
+ # Change this to your actual audio file path
+
+# Transcribe the audio
+transcribed_text = transcribe_audio(audio_file)
+
+# Save the transcript to a text file
+with open("transcription.txt", "w") as file:
+    file.write(transcribed_text)
+
+print("\nTranscription saved to 'transcription.txt'")
+!ollama pull llama3
+import ollama
+
+# Function to enhance ASR output using LLaMA
+def enhance_text(text):
+    if not text:
+        return "No transcription available to enhance."
+
+    prompt = f"Improve the following ASR transcription by correcting errors and formatting it properly:\n\n{text}"
+    
+    response = ollama.chat(model="llama3", messages=[{"role": "user", "content": prompt}])
+    
+    return response['message']['content']
+
+# Load ASR transcription from file
+try:
+    with open("transcription.txt", "r") as file:
+        asr_text = file.read()
+except FileNotFoundError:
+    print("Error: 'transcription.txt' not found. Run the ASR script first.")
+    asr_text = ""
+
+# Enhance text
+enhanced_text = enhance_text(asr_text)
+print("\nEnhanced Text:", enhanced_text)
+
+# Save enhanced text to file
+with open("enhanced_transcription.txt", "w") as file:
+    file.write(enhanced_text)
+
+print("\nEnhanced transcription saved to 'enhanced_transcription.txt'")
+
+import jiwer
+
+# Define normalization transformation
+transform = jiwer.Compose([
+    jiwer.ToLowerCase(),
+    jiwer.RemovePunctuation(),
+    jiwer.RemoveMultipleSpaces(),
+    jiwer.Strip()
+])
+
+# Load and normalize all files
+def load_and_normalize(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    return transform(text)
+
+# Processed inputs
+ground_truth = load_and_normalize("ground_truth.txt")
+transcript = load_and_normalize("transcription.txt")
+enhanced_transcript = load_and_normalize("enhanced_transcription.txt")
+
+# Compute WER
+wer_original = jiwer.wer(ground_truth, transcript)
+wer_enhanced = jiwer.wer(ground_truth, enhanced_transcript)
+
+print(f"WER (Original Transcript): {wer_original:.2%}")
+print(f"WER (Enhanced Transcript): {wer_enhanced:.2%}")
